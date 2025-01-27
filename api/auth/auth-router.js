@@ -18,10 +18,10 @@ router.post("/register", validateRoleName, async (req, res, next) => {
     }
    */
   try {
-    const { username, password, role_name = 'default_role'} = req.body
+    const { username, password} = req.body
     const hash = bcrypt.hashSync(password, 8) // hash the password with a salt round of 8
     
-    const user = await Users.add({ username, password: hash, role_name })
+    const user = await Users.add({ username, password: hash, role_name: req.role_name })
     
     
     res.status(201).json(user)
@@ -70,6 +70,9 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
   } catch (err) {
     next(err)
   }
+  
+  
+
 });
 
 module.exports = router;
